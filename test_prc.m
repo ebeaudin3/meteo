@@ -38,16 +38,8 @@ for j=1:2
             quantiles(:,i) = NaN_mat;
         else quantiles(:,i) = srtmat(a:b,2);
         end
-        
-        % Si on ne s'est pas rendu a 366
-        % PROBLEME, CA RAJOUTE UN AUTRE QUANTILE
-        %if i==nb_quant && b<366
-        %    NaN_mat = NaN(b-a+1,1);
-        %    NaN_mat(1:367-b,1) = srtmat(b:366,2);
-        %    quantiles(:,i+1) = NaN_mat;
-        %end
     end
-    %moy_qtl(j,:) = nanmean(quantiles);
+    moy_qtl(j,:) = nanmean(quantiles);
 end
 toc
 
