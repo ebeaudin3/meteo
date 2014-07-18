@@ -3,8 +3,8 @@
 % Initialisation des variables
 mois = 1;
 fenetre = 21;
-manic = 5;
-type = 'neige';        % 'tmin', 'tmax', 'pluie', 'neige'
+manic = 2;
+type = 'pluie';        % 'tmin', 'tmax', 'pluie', 'neige'
 switch lower(type)
     case 'tmin', m=2; y = 'Tmin [^oC]';
     case 'tmax', m=3; y = 'T max [^oC]';

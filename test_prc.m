@@ -1,45 +1,60 @@
 %%% TEST DE LA FONCTION PERCTILE AVEC LA TEMP DE MANIC 2 ET 5
+fig=0;
+%%% pour size(METEO) = [366, 2]
 
-
-
-%%% M?THODE 1, pour size(METEO) quelconque
-figure
-nb_quant=12;
+% Initialisation des variables
+nb_quant=17;
 P = linspace(1,100,nb_quant);
 percentiles = zeros(nb_quant,64);
 
+moy_qtl = zeros(2,nb_quant);
+diff_qtl = zeros(1,nb_quant);
+
 tic
-for an=1950:2013
-    matrice = [[1:366]' METEO(:,an-1949)];
-    %for i=round(P)
-    percentiles(1:nb_quant,an-1949) = perctile(matrice(:,2),P);
+for j=1:2   
+    matrice = [(1:366)' METEO(:,j)];
     srtmat = sortrows(matrice,2);
-    plot(1:nb_quant,percentiles)
+    for i=1:nb_quant
+        % Calcul des bornes
+        if round(366/nb_quant)<366/nb_quant;
+            n = 366;
+            while mod(n,nb_quant)~=0
+                n=n+1;
+            end
+            a =(i-1)*floor(n/nb_quant)+1;
+            b = i*floor(n/nb_quant); 
+        else
+            a =(i-1)*round(366/nb_quant)+1;
+            b = i*round(366/nb_quant);
+        end
+        
+        % Initialisation des variables
+        if i==1, quantiles = zeros(b-a+1,nb_quant); end
+        
+        % Borne supérieure plus grande que 366
+        if b>366,
+            NaN_mat = NaN(b-a+1,1);
+            NaN_mat(1:367-a,1) = srtmat(a:366,2);
+            quantiles(:,i) = NaN_mat;
+        else quantiles(:,i) = srtmat(a:b,2);
+        end
+        
+        % Si on ne s'est pas rendu a 366
+        % PROBLEME, CA RAJOUTE UN AUTRE QUANTILE
+        %if i==nb_quant && b<366
+        %    NaN_mat = NaN(b-a+1,1);
+        %    NaN_mat(1:367-b,1) = srtmat(b:366,2);
+        %    quantiles(:,i+1) = NaN_mat;
+        %end
+    end
+    %moy_qtl(j,:) = nanmean(quantiles);
+end
+toc
+
+diff_qtl = moy_qtl(2,:)-moy_qtl(1,:);
+
+if fig==1
+    figure
+    plot(1:nb_quant,moy_quant)
     xlim([1 nb_quant])
 end
-toc
-
-
-%%% M?THODE 2, pour size(METEO) = 366 2
-figure
-nb_quant=12;
-P = linspace(1,100,nb_quant);
-percentiles = zeros(nb_quant,64);
-matrice = [[1:366]' METEO(:,i)];
-srtmat = sortrows(matrice,2);
-
-tic
-for i=1:nb_quant
-    a =(i-1)*round(366/nb_quant)+1;
-    b = i*round(366/nb_quant);
-    % IL FAUT FAIRE EN SORTE QUE QUANTILES PRENNENT LES VALEURS DE a:366,
-    % PUIS LES RESTES SERONT DES NaN.
-    if b>366, quantiles(:,i) = srtmat([a:366 ,2]);
-    else quantiles(:,i) = srtmat(a:b,2);
-    end
-    %percentiles(1:nb_quant,i) = find(perctile(matrice(:,2),89));
-    %plot(1:nb_quant,percentiles)
-    %xlim([1 nb_quant])
-end
-toc
-
