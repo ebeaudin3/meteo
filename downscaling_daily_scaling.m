@@ -17,10 +17,10 @@ function [out, dsf, P] = downscaling_daily_scaling(obs, ref, fut, N, type, freq,
 %   The number of points in the percentile table.
 % type : string
 %   Either 'multiplicative' or 'additive'. 
-% freq : {'m', 'y'} Default='y'
-%   Either monthly 'm' or annual 'y'. If the monthly option is chosen,
-%   obs, ref and fut must be structures with fields `data` and `dates`, 
-%   instead of simple vectors. 
+% freq : {'m', 's', 'y'} Default='y'
+%   Either monthly 'm', seasonal 's' or annual 'y'. If the monthly option 
+%   is chosen, obs, ref and fut must be structures with fields `data` and 
+%   `dates`, instead of simple vectors.
 % cap : float
 %   Maximum value allowed in the scaling factor, defaults to inf. 
 %
@@ -31,7 +31,7 @@ function [out, dsf, P] = downscaling_daily_scaling(obs, ref, fut, N, type, freq,
 %   the distribution of the reference and future periods. 
 % dsf : mxN matrix
 %   Daily scaling factor evaluated at ~linspace(0,100,N). m is equal to 1
-%   for the annual frequency and 12 for monthly.
+%   for the annual frequency, 4 for seasonaly, and 12 for monthly.
 % P : 1xN matrix
 %   Percents.
 %  

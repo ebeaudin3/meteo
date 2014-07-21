@@ -5,10 +5,10 @@ fig=0;
 % Initialisation des variables
 nb_quant=17;
 P = linspace(1,100,nb_quant);
-percentiles = zeros(nb_quant,64);
+percentiles = nan(nb_quant,64);
 
-moy_qtl = zeros(2,nb_quant);
-diff_qtl = zeros(1,nb_quant);
+moy_qtl = nan(2,nb_quant);
+diff_qtl = nan(1,nb_quant);
 
 tic
 for j=1:2   
@@ -31,7 +31,7 @@ for j=1:2
         % Initialisation des variables
         if i==1, quantiles = zeros(b-a+1,nb_quant); end
         
-        % Borne supérieure plus grande que 366
+        % Borne sup?rieure plus grande que 366
         if b>366,
             NaN_mat = NaN(b-a+1,1);
             NaN_mat(1:367-a,1) = srtmat(a:366,2);
