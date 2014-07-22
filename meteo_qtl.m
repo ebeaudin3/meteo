@@ -1,28 +1,47 @@
+profile on
+
+
+
 simu = ['meteo_2_1'; 'meteo_2_2'; 'meteo_2_3'; 'meteo_2_4'; 'meteo_2_5'];
 %simu = ['meteo_5_1'; 'meteo_5_2'; 'meteo_5_3'; 'meteo_5_4'; 'meteo_5_5'];
 
-%type_meteo = 'tmin';
+type_meteo = 'tmin';
 switch lower(type_meteo)
-    case 'tmin', type_meteo='tasmin'; type = 'additive';
-    case 'tmax', type_meteo='tasmax'; type = 'additive';
-    case {'pluie','neige'}, type_meteo = 'pr'; type = 'multiplicative';
+    case 'tmin', type_meteo='tasmin'; tm=2; type = 'additive';
+    case 'tmax', type_meteo='tasmax'; tm=3; type = 'additive';
+    case 'pluie', type_meteo = 'pr'; tm=4; type = 'multiplicative';
+    case 'neige', type_meteo = 'pr'; tm=5; type = 'multiplicative';
 end
 
-an = 1950;
-obs = METEO(:,an-1949);
 
-N = 10;
-freq = 'y';
+annee_cible = 1960;
+annee_source = 2014;
 
-for i_simu=1:1
-    % Chargement des donnees
-    donnees = load([simu(i_simu,:), '.mat']);
-    % Traitement des donnees
-    ref = eval(sprintf('donnees.model_data.ref.%s.data',type_meteo));
-    ref_yr = eval('donnees.model_data.ref.dates');
-    fut = eval(sprintf('donnees.model_data.fut.%s.data',type_meteo));
-    fut_yr = eval('donnees.model_data.fut.dates');
+% Chargement et traitement des donnees observees
+donnees_obs = load('meteo_Manic2.csv');
+obs = struct();
+obs.dates(:,[1 2 3 4 5 6]) = nan;
+a = datenum({'01-Jan-1950 00:00:00';'31-Dec-2013 23:00:00'});
+obs.dates = datevec(a(1):1:a(2));
+ind_dates = find(obs.dates==annee_cible);
+obs.dates = obs.dates(ind_dates,:);
+obs.data = donnees_obs(ind_dates,tm);
+
+N = 46;
+freq = 'm';
+i_simu = 1;
+cap = inf;
+
+    % Chargement et traitement des donnees du modele
+    donnees_mod = load([simu(i_simu,:), '.mat']);
+    ref.data = eval(sprintf('donnees_mod.model_data.ref.%s.data',type_meteo));
+    ref.dates = eval('donnees_mod.model_data.ref.dates');
+        %ref_yr = eval('donnees.model_data.ref.dates');
+    fut.data = eval(sprintf('donnees_mod.model_data.fut.%s.data',type_meteo));
+    fut.dates = eval('donnees_mod.model_data.fut.dates');
+        %fut_yr = eval('donnees.model_data.fut.dates');
     
-    [out, dsf, P] = downscaling_daily_scaling(obs, ref, fut, N, type, freq)
-end
+    [out, dsf, P] = downscaling_daily_scaling(obs, ref, fut, N, type, freq, cap, annee_source, annee_cible);
 
+p=profile('info');
+profile off

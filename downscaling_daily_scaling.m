@@ -1,9 +1,10 @@
-function [out, dsf, P] = downscaling_daily_scaling(obs, ref, fut, N, type, freq, cap)
+function [out, dsf, P] = downscaling_daily_scaling(obs, ref, fut, N, type, freq, cap, annee_source, annee_cible)
 
 % Downscale GCM data using the daily scaling method. A daily scaling factor
 % is computed from the percentiles of the reference and the future period 
 % and applied to observational data to simulate the future transition. 
-% The scaling factor can be computed on an annual or a monthly basis.
+% The scaling factor can be computed on an annual, a seasonal or a monthly 
+% basis.
 %
 % Parameters
 % ----------
@@ -16,7 +17,7 @@ function [out, dsf, P] = downscaling_daily_scaling(obs, ref, fut, N, type, freq,
 % N : int
 %   The number of points in the percentile table.
 % type : string
-%   Either 'multiplicative' or 'additive'. 
+%   Either 'multiplicative' (precipitation) or 'additive' (temperature). 
 % freq : {'m', 's', 'y'} Default='y'
 %   Either monthly 'm', seasonal 's' or annual 'y'. If the monthly option 
 %   is chosen, obs, ref and fut must be structures with fields `data` and 
@@ -52,16 +53,22 @@ switch lower(freq)
         [out, dsf, P] = rank_based_scaling(obs, ref, fut, N, type, cap);
        
     case 'm'
-        dsf = zeros(12,N);
+        dsf = nan(12,N);
         for m = 1:12        
             oi = obs.dates(:,2) == m;
-            fi = fut.dates(:,2) == m;
             ri = ref.dates(:,2) == m;
+            fi = fut.dates(:,2) == m;
 
-            [out.data(oi), dsf(m,:), P] = rank_based_scaling(obs.data(oi), ref.data(ri), fut.data(fi), N, type, cap);
+            [out.data(oi), dsf(m,:), P] = rank_based_scaling(obs.data(oi), ref.data(ri), fut.data(fi), N, type, cap, annee_source, annee_cible);
         end
 
         out.dates = scale_dates(obs.dates, fut.dates(1,1) - ref.dates(1,1));
+    
+   % SI ON A LE TEMPS     
+   % case 's' % s pour saison
+        %dsf = nan(4,N);
+        %for s = 1:4; end
+            
         
 end
 

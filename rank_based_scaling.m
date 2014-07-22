@@ -1,4 +1,4 @@
-function [out, sf, P] = rank_based_scaling(obs, ref, fut, N, type, cap)
+function [out, sf, P] = rank_based_scaling(obs, ref, fut, N, type, cap, annee_source, annee_cible)
 
 % Generic scaling method. A daily scaling factor
 % is computed from the percentiles of the reference and the future period 
@@ -61,7 +61,7 @@ futP = interp1(Pa, perctile(fut+r_fut, Pa), P, 'cubic', 'extrap');
 obsP = interp1(Pa, perctile(obs+r_obs, Pa), P, 'cubic', 'extrap');
 
 
-%plot(Pi, [refP;futP;obsP])
+plot(P, [refP;futP;obsP])
 
 % Compute the daily scaling factor and apply it to the observations.
 switch lower(type)
@@ -76,6 +76,9 @@ switch lower(type)
 
     case 'additive'
         sf = futP - refP;
+        sf_source = ((annee_source-1975)/80)*sf;
+        sf_cible = ((annee_cible-1975)/80)*sf;
+        sf = sf_source - sf_cible;
         sf(sf>cap) = cap;
         out = interp1(obsP, sf, obs, 'nearest', 'extrap') + obs;
 
@@ -89,7 +92,7 @@ if any(isnan(sf))
 end
 
 if any(isnan(out))
-  %error('NaN in out.')
+  error('NaN in out.')
 end
 
 
