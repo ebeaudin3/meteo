@@ -72,10 +72,10 @@ switch lower(freq)
             ri = logical((ref.dates(:,2) == season(s,1)) + (ref.dates(:,2) == season(s,2)) + (ref.dates(:,2) == season(s,3)));
             fi = logical((fut.dates(:,2) == season(s,1)) + (fut.dates(:,2) == season(s,2)) + (fut.dates(:,2) == season(s,3)));
             
-            [out.data(oi,:), dsf(s,:), P] = rank_based_scaling(obs.data(oi), ref.data(ri), fut.data(fi), N, type, cap, annee_source, annee_cible);
+            [out(oi,:), dsf(s,:), P] = rank_based_scaling(obs.data(oi), ref.data(ri), fut.data(fi), N, type, cap, annee_source, annee_cible);
+        % avant, out=out.data(oi,:)
         end
         
-        out.dates = scale_dates(obs.dates, fut.dates(1,1) - ref.dates(1,1));   
-        size(out.data)
+        %out.dates = scale_dates(obs.dates, fut.dates(1,1) - ref.dates(1,1));   
 end
 

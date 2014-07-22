@@ -69,6 +69,9 @@ switch lower(type)
     case 'multiplicative'
         % Clip to 0 if negative.
         sf = futP./refP;
+        sf_source = ((annee_source-1975)/80)*sf;
+        sf_cible = ((annee_cible-1975)/80)*sf;
+        sf = sf_source - sf_cible;
         sf(sf<0) = 0.;
         sf(sf>cap) = cap;
         out = interp1(obsP, sf, obs, 'nearest', 'extrap') .*  obs;
