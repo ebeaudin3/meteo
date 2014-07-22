@@ -27,8 +27,8 @@ ind_dates = find(obs.dates==annee_cible);
 obs.dates = obs.dates(ind_dates,:);
 obs.data = donnees_obs(ind_dates,tm);
 
-N = 46;
-freq = 'm';
+N = 10;
+freq = 's';
 i_simu = 1;
 cap = inf;
 
@@ -44,4 +44,14 @@ cap = inf;
     [out, dsf, P] = downscaling_daily_scaling(obs, ref, fut, N, type, freq, cap, annee_source, annee_cible);
 
 p=profile('info');
-profile off
+profile off  
+
+
+time(:,1)=1:size(p.FunctionTable,1);
+for t=1:size(p.FunctionTable,1)
+    time(t,2) = eval(sprintf('p.FunctionTable(%g,1).TotalTime',t));
+end
+time = sortrows(time,2);
+    
+  
+    

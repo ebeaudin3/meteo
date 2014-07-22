@@ -63,12 +63,19 @@ switch lower(freq)
         end
 
         out.dates = scale_dates(obs.dates, fut.dates(1,1) - ref.dates(1,1));
-    
-   % SI ON A LE TEMPS     
-   % case 's' % s pour saison
-        %dsf = nan(4,N);
-        %for s = 1:4; end
+        
+	case 's'
+        dsf = nan(4,N);
+        season = [12 1 2; 3 4 5; 6 7 8; 9 10 11]; 
+        for s = 1:4;
+            oi = logical((obs.dates(:,2) == season(s,1)) + (obs.dates(:,2) == season(s,2)) + (obs.dates(:,2) == season(s,3)));
+            ri = logical((ref.dates(:,2) == season(s,1)) + (ref.dates(:,2) == season(s,2)) + (ref.dates(:,2) == season(s,3)));
+            fi = logical((fut.dates(:,2) == season(s,1)) + (fut.dates(:,2) == season(s,2)) + (fut.dates(:,2) == season(s,3)));
             
+            [out.data(oi), dsf(s,:), P] = rank_based_scaling(obs.data(oi), ref.data(ri), fut.data(fi), N, type, cap, annee_source, annee_cible);
+        end
+        
+        out.dates = scale_dates(obs.dates, fut.dates(1,1) - ref.dates(1,1));   
         
 end
 

@@ -61,7 +61,7 @@ futP = interp1(Pa, perctile(fut+r_fut, Pa), P, 'cubic', 'extrap');
 obsP = interp1(Pa, perctile(obs+r_obs, Pa), P, 'cubic', 'extrap');
 
 
-plot(P, [refP;futP;obsP])
+%plot(P, [refP;futP;obsP])
 
 % Compute the daily scaling factor and apply it to the observations.
 switch lower(type)
