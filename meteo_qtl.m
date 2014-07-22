@@ -14,8 +14,8 @@ switch lower(type_meteo)
 end
 
 
-annee_cible = 1960;
-annee_source = 2014;
+annee_cible = 1950;
+annee_source = 2070;
 
 % Chargement et traitement des donnees observees
 donnees_obs = load('meteo_Manic2.csv');
@@ -46,7 +46,12 @@ cap = inf;
 p=profile('info');
 profile off  
 
+hold on, grid on, box on
+xlim([0 366])
+plot(obs.data,'-b'); 
+plot(out.data,'-r');
 
+time=zeros(size(p.FunctionTable,1),2);
 time(:,1)=1:size(p.FunctionTable,1);
 for t=1:size(p.FunctionTable,1)
     time(t,2) = eval(sprintf('p.FunctionTable(%g,1).TotalTime',t));

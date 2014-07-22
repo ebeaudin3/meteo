@@ -81,7 +81,6 @@ switch lower(type)
         sf = sf_source - sf_cible;
         sf(sf>cap) = cap;
         out = interp1(obsP, sf, obs, 'nearest', 'extrap') + obs;
-
     otherwise
         error('type not understood.')
 
