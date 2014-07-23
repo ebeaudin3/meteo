@@ -59,10 +59,10 @@ switch lower(freq)
             ri = ref.dates(:,2) == m;
             fi = fut.dates(:,2) == m;
 
-            [out.data(oi), dsf(m,:), P] = rank_based_scaling(obs.data(oi), ref.data(ri), fut.data(fi), N, type, cap, annee_source, annee_cible);
+            [out(oi,:), dsf(m,:), P] = rank_based_scaling(obs.data(oi), ref.data(ri), fut.data(fi), N, type, cap, annee_source, annee_cible);
         end
 
-        out.dates = scale_dates(obs.dates, fut.dates(1,1) - ref.dates(1,1));
+        %out.dates = scale_dates(obs.dates, fut.dates(1,1) - ref.dates(1,1));
         
 	case 's'
         dsf = nan(4,N);

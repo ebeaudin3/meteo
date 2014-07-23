@@ -1,3 +1,21 @@
 % % % Utilisation du modele hydrologique HSAMI
 
-parametre = [1.15 0.1 0.17 0.1 -1.65 3.747 1.999 1.744 9.788 34.999 3.844 3.684 16.805 21.948 0.25 0.632 0.011 0.008 0.912 2.145 0.7 2.535 0.845];
+%dossier_para = load('Manic_Param.csv');
+
+% Pour Manic2, colonne 5, pour Manic 5, colonne 2
+[num,txt,raw] = xlsread('/home/beaudin/matlab/Manic/meteo/Manic_Param.xls');
+
+versionHSAMI = '1';
+pas = 1;
+nb_pas = 24;
+param = num(1:23,5);
+meteo = %je dois faire un vecteur journalier de 1950 a 2013 de la meteo perturbee
+etp = %????
+etat = %voir hsami_meteo_apport.m. Sinon, on le modifiera avec les variables d'etat en sortie
+eau_hydrogrammes = % y reflechir, ou demander a Marie-Claude Simard
+hydrogrammes = % IDEM
+superficie = num(24,5); %N'EST PAS DEMANDE DANS LA FONCTION...?
+
+[etat,eau_hydrogrammes,apport_horizontal,apport_vertical,eau_surface,etr]...
+=hsami_meteo_apport(versionHSAMI,pas,nb_pas,param,meteo,etp,etat,...
+eau_hydrogrammes,hydrogrammes);

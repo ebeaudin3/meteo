@@ -1,10 +1,11 @@
 % % % PERTURBATION DES DONNEES METEO PAR QUANTILE % % %
+tic
+
 fig=1;
 
 %% CHOIX DES DONNEES
-
 annee_cible = 1950;
-annee_source = 2074;
+annee_source = 2014;
 
 type_meteo = 'tmin';
 switch lower(type_meteo)
@@ -14,14 +15,13 @@ switch lower(type_meteo)
     case 'neige', type_meteo = 'pr'; tm=5; type = 'multiplicative'; y = 'Neige [mm]';
 end
 
-N = 10; % nb de quantiles par mois/saison/annee
-freq = 'm'; % 's'=saison, 'm'=mois, 'y'=annee
+N = 50; % nb de quantiles par mois/saison/annee
+freq = 's'; % 's'=saison, 'm'=mois, 'y'=annee
 cap = inf; % borne superieure 
 
 profile on
 
 %% INITIALISATION DES VARIABLES
-
 simu = ['meteo_2_1'; 'meteo_2_2'; 'meteo_2_3'; 'meteo_2_4'; 'meteo_2_5'];
 %simu = ['meteo_5_1'; 'meteo_5_2'; 'meteo_5_3'; 'meteo_5_4'; 'meteo_5_5'];
 
@@ -62,21 +62,24 @@ end
 
 %% SECTION GRAPHIQUE
 if fig==1
+    colorb = colormap(cbrewer('qual','Set2',8)); close;
     figure
     hold on, grid on, box on
     xlim([0 366])
-    datetick('x','mmm')
+    %datetick('x','mmm')
     ylabel(y)
     set(gca,'fontsize',14)
-    for i_simu=1:size(simu,1)
-        plot(obs.data,'-b','linewidth',3);
-        plot(out(:,i_simu),'-r');
-        minout = min(out,[],2);
-        maxout = max(out,[],2);
-        plot([1:366]',minout,[1:366]',maxout)
-        figure
-        jbfill([1:366]',min(out,[],2),max(out,[],2))
-    end 
+    plot(obs.data,'linewidth',0.5,'color',[0.4020 0.4020 0.4020]);
+    minout = min(out,[],2);
+    maxout = max(out,[],2);
+    jbfill([1:366],[min(out,[],2)]',[max(out,[],2)]',colorb(tm,:),colorb(tm,:));
+    %figure
+    %for i_simu=1:size(simu,1)
+    %    plot(out(:,i_simu),'color',colorb(:,i_simu));
+    %    plot([1:366]',minout,'.m',[1:366]',maxout,'.g')
+    %    figure
+    %    xlim([0 366])
+    %end 
 end
 
 
@@ -85,11 +88,12 @@ p=profile('info');
 profile off 
 
 time=zeros(size(p.FunctionTable,1),2);
-time(:,1)=1:size(p.FunctionTable,1);
+time = num2cell(time);
 for t=1:size(p.FunctionTable,1)
-    time(t,2) = eval(sprintf('p.FunctionTable(%g,1).TotalTime',t));
+    time(t,1) = char2cell(eval(sprintf('p.FunctionTable(%g,1).FunctionName',t)));
+    time(t,2) = num2cell(eval(sprintf('p.FunctionTable(%g,1).TotalTime',t)));
 end
 time = sortrows(time,2);
     
   
-    
+toc    
