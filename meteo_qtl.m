@@ -1,5 +1,8 @@
 % % % PERTURBATION DES DONNEES METEO PAR QUANTILE % % %
-function [donnees_perturbees p] = meteo_qtl(type_meteo, N, freq, cap, annee_source, fig)
+function [annee_perturbee p] = meteo_qtl(type_meteo, N, freq, cap, annee_cible, annee_source, fig)
+
+%pour utilisation sans fonction :
+%type_meteo='tmax'; N=50; freq='s'; cap=Inf; annee_cible = 1950; annee_source=2014; fig=0;
 
 profile on
 
@@ -13,19 +16,12 @@ end
 %% INITIALISATION DES VARIABLES
 simu = ['meteo_2_1'; 'meteo_2_2'; 'meteo_2_3'; 'meteo_2_4'; 'meteo_2_5'];
 %simu = ['meteo_5_1'; 'meteo_5_2'; 'meteo_5_3'; 'meteo_5_4'; 'meteo_5_5'];
-
-h = waitbar(0,'Perturbation par quantiles');
-
-for annee_cible = 1950:1:2013;
-    
-    waitbar((annee_cible-1949)/(2013-1949),h)
     
     dsf = 0;%cell(size(simu,1),1);
     P = 0;%nan(size(simu,1),N);
     
     %% CHARGEMENT DES DONNEES OBSERVEES
     donnees_obs = load('meteo_Manic2.csv');
-       if annee_cible==1950, donnees_perturbees = nan(length(donnees_obs),size(simu,1)); end   
     obs = struct();
     obs.dates(:,[1 2 3 4 5 6]) = nan;
     a = datenum({'01-Jan-1950 00:00:00';'31-Dec-2013 23:00:00'});
@@ -33,7 +29,7 @@ for annee_cible = 1950:1:2013;
     ind_dates = find(obs.dates==annee_cible);
     obs.dates = obs.dates(ind_dates,:);
     obs.data = donnees_obs(ind_dates,tm);
-    out = nan(length(ind_dates),size(simu,1));
+    annee_perturbee = nan(length(ind_dates),size(simu,1));
     
     %% PERTURBATION DES DONNEES OBSERVEES
     %   ET CHARGEMENT DES DONNEES DU MODELE
@@ -47,11 +43,11 @@ for annee_cible = 1950:1:2013;
         fut.data = eval(sprintf('donnees_mod.model_data.fut.%s.data',type_meteo));
         fut.dates = eval('donnees_mod.model_data.fut.dates');
         
-        [out(:,i_simu), dsf P] = downscaling_daily_scaling(obs, ref, fut, N, type, freq, cap, annee_source, annee_cible);
+        [annee_perturbee(:,i_simu) dsf P] = downscaling_daily_scaling(obs, ref, fut, N, type, freq, cap, annee_source, annee_cible);
          
     end
     
-    donnees_perturbees(ind_dates,:)=out;
+    %annee_perturbee(ind_dates,:)=out;
     
     %% SECTION GRAPHIQUE
     if fig==1
@@ -63,9 +59,9 @@ for annee_cible = 1950:1:2013;
         ylabel(y)
         set(gca,'fontsize',14)
         plot(obs.data,'linewidth',0.5,'color',[0.4020 0.4020 0.4020]);
-        minout = min(out,[],2);
-        maxout = max(out,[],2);
-        jbfill([1:length(ind_dates)],[min(out,[],2)]',[max(out,[],2)]',colorb(tm,:),colorb(tm,:));
+        minout = min(annee_perturbee,[],2);
+        maxout = max(annee_perturbee,[],2);
+        jbfill([1:length(ind_dates)],[min(annee_perturbee,[],2)]',[max(annee_perturbee,[],2)]',colorb(tm,:),colorb(tm,:));
         %figure
         %for i_simu=1:size(simu,1)
         %    plot(out(:,i_simu),'color',colorb(:,i_simu));
@@ -74,10 +70,6 @@ for annee_cible = 1950:1:2013;
         %    xlim([0 366])
         %end
     end
-    
-end
-
-close(h);
 
 %% SECTION PROFILER
 p=profile('info');
