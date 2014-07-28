@@ -14,14 +14,14 @@ switch lower(type_meteo)
 end
 
 %% INITIALISATION DES VARIABLES
-simu = ['meteo_2_1'; 'meteo_2_2'; 'meteo_2_3'; 'meteo_2_4'; 'meteo_2_5'];
-%simu = ['meteo_5_1'; 'meteo_5_2'; 'meteo_5_3'; 'meteo_5_4'; 'meteo_5_5'];
+%simu = ['meteo_2_1'; 'meteo_2_2'; 'meteo_2_3'; 'meteo_2_4'; 'meteo_2_5'];
+simu = ['meteo_5_1'; 'meteo_5_2'; 'meteo_5_3'; 'meteo_5_4'; 'meteo_5_5'];
     
     dsf = 0;%cell(size(simu,1),1);
     P = 0;%nan(size(simu,1),N);
     
     %% CHARGEMENT DES DONNEES OBSERVEES
-    donnees_obs = load('meteo_Manic2.csv');
+    donnees_obs = load('meteo_Manic5.csv');
     obs = struct();
     obs.dates(:,[1 2 3 4 5 6]) = nan;
     a = datenum({'01-Jan-1950 00:00:00';'31-Dec-2013 23:00:00'});
