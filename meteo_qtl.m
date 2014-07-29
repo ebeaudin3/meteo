@@ -1,9 +1,10 @@
 % % % PERTURBATION DES DONNEES METEO PAR QUANTILE % % %
-function [annee_perturbee p] = meteo_qtl(type_meteo, N, freq, cap, annee_cible, annee_source, fig)
+function [annee_perturbee p] = meteo_qtl(type_meteo, N, freq, cap, annee_cible, annee_source, manic, fig)
 
 %pour utilisation sans fonction :
 %type_meteo='tmax'; N=50; freq='s'; cap=Inf; annee_cible = 1950; annee_source=2014; fig=0;
 
+%% INITIALISATION DES VARIABLES
 profile on
 
 switch lower(type_meteo)
@@ -13,15 +14,13 @@ switch lower(type_meteo)
     case 'neige', type_meteo = 'pr'; tm=5; type = 'multiplicative'; y = 'Neige [mm]';
 end
 
-%% INITIALISATION DES VARIABLES
-%simu = ['meteo_2_1'; 'meteo_2_2'; 'meteo_2_3'; 'meteo_2_4'; 'meteo_2_5'];
-simu = ['meteo_5_1'; 'meteo_5_2'; 'meteo_5_3'; 'meteo_5_4'; 'meteo_5_5'];
-    
     dsf = 0;%cell(size(simu,1),1);
     P = 0;%nan(size(simu,1),N);
     
     %% CHARGEMENT DES DONNEES OBSERVEES
-    donnees_obs = load('meteo_Manic5.csv');
+    if manic==2, donnees_obs = load('meteo_Manic2.csv'); simu = ['meteo_2_1'; 'meteo_2_2'; 'meteo_2_3'; 'meteo_2_4'; 'meteo_2_5'];
+    elseif manic==5, donnee_obs = load('meteo_Manic5.csv'); simu = ['meteo_5_1'; 'meteo_5_2'; 'meteo_5_3'; 'meteo_5_4'; 'meteo_5_5'];
+    end
     obs = struct();
     obs.dates(:,[1 2 3 4 5 6]) = nan;
     a = datenum({'01-Jan-1950 00:00:00';'31-Dec-2013 23:00:00'});
@@ -61,7 +60,7 @@ simu = ['meteo_5_1'; 'meteo_5_2'; 'meteo_5_3'; 'meteo_5_4'; 'meteo_5_5'];
         plot(obs.data,'linewidth',0.5,'color',[0.4020 0.4020 0.4020]);
         minout = min(annee_perturbee,[],2);
         maxout = max(annee_perturbee,[],2);
-        jbfill([1:length(ind_dates)],[min(annee_perturbee,[],2)]',[max(annee_perturbee,[],2)]',colorb(tm,:),colorb(tm,:));
+        jbfill([1:length(ind_dates)],[minout]',[maxout]',colorb(tm,:),colorb(tm,:));
         %figure
         %for i_simu=1:size(simu,1)
         %    plot(out(:,i_simu),'color',colorb(:,i_simu));

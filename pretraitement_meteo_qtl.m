@@ -27,8 +27,8 @@ else annee_perturbee=nan(365,4);
 end
 
 %% CHARGEMENT DES DONNEES OBSERVEES
-if manic==2, donnees_obs = load('meteo_Manic2.csv'); simu = ['meteo_2_1'; 'meteo_2_2'; 'meteo_2_3'; 'meteo_2_4'; 'meteo_2_5'];
-elseif manic==5, donnees_obs = load('meteo_Manic5.csv'); simu = ['meteo_5_1'; 'meteo_5_2'; 'meteo_5_3'; 'meteo_5_4'; 'meteo_5_5'];
+if manic==2, donnees_obs = load('/home/beaudin/matlab/Manic/meteo/meteo_Manic2.csv'); simu = ['meteo_2_1'; 'meteo_2_2'; 'meteo_2_3'; 'meteo_2_4'; 'meteo_2_5'];
+elseif manic==5, donnees_obs = load('/home/beaudin/matlab/Manic/meteo/meteo_Manic5.csv'); simu = ['meteo_5_1'; 'meteo_5_2'; 'meteo_5_3'; 'meteo_5_4'; 'meteo_5_5'];
 end
 obs = struct();
 obs.dates(:,[1 2 3 4 5 6]) = nan;

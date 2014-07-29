@@ -1,5 +1,22 @@
 % % % Utilisation du modele hydrologique HSAMI
 
+debits_horizontaux_perturbes = nan(366,2013-1950+1);
+debits_verticaux_perturbes = nan(366,2013-1950+1);
+for annee_cible=1950:2013
+    
+    annee_perturbee = pretraitement_meteo_qtl(50, 's', annee_cible, 2014, 2, 0);
+    [debits_horizontaux_perturbes(:,annee_cible-1949) ...
+        debits_verticaux_perturbes(:,annee_cible-1949)] = ...
+            utilisation_hsami(annee_cible,annee_perturbee,15,2);
+end
+
+figure
+plot(debits_horizontaux_perturbes)
+
+
+
+
+profile on
 % Pour Manic2: colonne 5, Manic 5: colonne 2
 num = xlsread('/home/beaudin/matlab/Manic/meteo/Manic_Param.xls');
 
@@ -12,22 +29,8 @@ colorb = colormap(cbrewer('seq','Blues',2013-1950+1)); close;
 
 
 for annee_cible=1950:1:2013;
-annee_cible
+fprintf('%d  ',annee_cible)
 % Initialisation de la matrice de donnees meteo perturbees
-oui=1;
-if oui==1
-    %annee_cible = 2008;
-    if mod(annee_cible,4)==0 && mod(annee_cible,100)~=0,
-       annee_perturbee=nan(366,4);
-    elseif mod(annee_cible,400)==0 
-       annee_perturbee=nan(366,4);
-    else annee_perturbee=nan(365,4);
-    end
-    annee_perturbee(:,1) = mean(meteo_qtl('tmin',50,'s',Inf,annee_cible,2014,0),2);
-    annee_perturbee(:,2) = mean(meteo_qtl('tmax',50,'s',Inf,annee_cible,2014,0),2);
-    annee_perturbee(:,3) = mean(meteo_qtl('pluie',50,'s',Inf,annee_cible,2014,0),2);
-    annee_perturbee(:,4) = mean(meteo_qtl('neige',50,'s',Inf,annee_cible,2014,0),2);
-end
 
 etp = -1; %S'IL EST NEGATIF, HSAMI L'EVALUE
 etat_ini = [0 0 0 0 0 0 0 0 0 0];
@@ -80,9 +83,6 @@ end
 debits_horizontaux_perturbees(:,annee_cible-1949) = movingmean(sum(apport_vertical,2),15,[],1);
 debits_verticaux_perturbees(:,annee_cible-1949) = movingmean(sum(apport_vertical,2),15,[],1);
 
-
-
-
 hold on
 plot(1:366,debits_horizontaux_perturbees(:,annee_cible-1949),'color',colorb(annee_cible-1949,:),'linewidth',3)
 %plot(1:366,debits_verticaux_perturbees(:,annee_cible-1949),'-b','linewidth',1.5)
@@ -101,3 +101,15 @@ xlim([1 length(annee_perturbee)])
 datetick('x','mmm')
 hold off
 
+
+% Section Profiler
+p=profile('info');
+profile off
+
+time=zeros(size(p.FunctionTable,1),2);
+time = num2cell(time);
+for t=1:size(p.FunctionTable,1)
+    time(t,1) = char2cell(eval(sprintf('p.FunctionTable(%g,1).FunctionName',t)));
+    time(t,2) = num2cell(eval(sprintf('p.FunctionTable(%g,1).TotalTime',t)));
+end
+time = sortrows(time,2);
