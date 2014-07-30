@@ -39,9 +39,9 @@ function [out, sf, P] = rank_based_scaling(obs, ref, fut, N, type, cap, annee_so
 if ~exist('cap', 'var')
     cap = inf;
 end
-r_ref = rand(size(ref))*1e-12;
-r_fut = rand(size(fut))*1e-12;
-r_obs = rand(size(obs))*1e-12;
+r_ref = rand(size(ref))*1e-6;
+r_fut = rand(size(fut))*1e-6;
+r_obs = rand(size(obs))*1e-6;
 
 
 % Compute the percentiles for all three datasets. 
