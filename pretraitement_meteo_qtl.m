@@ -1,4 +1,4 @@
-function annee_perturbee = pretraitement_meteo_qtl(N, freq, annee_cible, annee_source, manic, fig)
+function meteo_perturbee = pretraitement_meteo_qtl(N, freq, annee_cible, annee_source, manic, fig)
 
 % % % PERTURBATION DES DONNEES METEO PAR QUANTILE % % %
 
@@ -20,10 +20,10 @@ dsf = 0;%cell(size(simu,1),1);
 P = 0;%nan(size(simu,1),N);
 
 if mod(annee_cible,4)==0 && mod(annee_cible,100)~=0,
-    annee_perturbee=nan(366,4);
+    meteo_perturbee=nan(366,4);
 elseif mod(annee_cible,400)==0
-    annee_perturbee=nan(366,4);
-else annee_perturbee=nan(365,4);
+    meteo_perturbee=nan(366,4);
+else meteo_perturbee=nan(365,4);
 end
 
 %% CHARGEMENT DES DONNEES OBSERVEES
@@ -82,7 +82,7 @@ for i_meteo=1:4
         %end
         hold off
     end
-    annee_perturbee(:,i_meteo) = mean(out,2);
+    meteo_perturbee(:,i_meteo) = mean(out,2);
 end
 %% SECTION PROFILER
 p=profile('info');
