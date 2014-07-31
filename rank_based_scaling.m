@@ -69,13 +69,17 @@ switch lower(type)
     case 'multiplicative'
         % Clip to 0 if negative.
         sf = futP./refP;
-        sf_source = ((annee_source-1975)/80)*sf;
-        sf_cible = ((annee_cible-1975)/80)*sf;
-        sf = sf_source - sf_cible;
+        sf = sf.^((annee_source-annee_cible)/80);
         sf(sf<0) = 0.;
         sf(sf>cap) = cap;
         out = interp1(obsP, sf, obs, 'nearest', 'extrap') .*  obs;
-        
+                    %colorb = colormap(cbrewer('seq','PuRd',2013-1950+1)); 
+                    %figure, hold on
+                    %for annee_cible = 1950:2013; 
+                    %    sf = futP./refP; 
+                    %    sf_n(annee_cible-1949,:) = sf.^((annee_source-annee_cible)/80); 
+                    %    plot(sf_n(annee_cible-1949,:),'color',colorb(annee_cible-1949,:),'linewidth',2); 
+                    %end
 
     case 'additive'
         sf = futP - refP;

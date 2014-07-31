@@ -3,7 +3,7 @@ function meteo_perturbee = pretraitement_meteo_qtl(N, freq, annee_cible, annee_s
 % % % PERTURBATION DES DONNEES METEO PAR QUANTILE % % %
 
 %pour utilisation sans fonction :
-%manic=2; N=50; freq='s'; annee_cible = 1960; annee_source=2014; fig=1;
+%manic=2; N=50; freq='s'; annee_cible = 2010; annee_source=2014; fig=1;
 
 %% INITIALISATION DES VARIABLES
 profile on
@@ -85,13 +85,5 @@ for i_meteo=1:4
     meteo_perturbee(:,i_meteo) = mean(out,2);
 end
 %% SECTION PROFILER
-p=profile('info');
+time = profiler(profile('info'));
 profile off
-
-time=zeros(size(p.FunctionTable,1),2);
-time = num2cell(time);
-for t=1:size(p.FunctionTable,1)
-    time(t,1) = char2cell(eval(sprintf('p.FunctionTable(%g,1).FunctionName',t)));
-    time(t,2) = num2cell(eval(sprintf('p.FunctionTable(%g,1).TotalTime',t)));
-end
-time = sortrows(time,2);

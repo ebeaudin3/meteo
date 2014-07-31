@@ -12,6 +12,7 @@ etat_n = nan(n,10);
 
 % calcul des debits vertical et horizontal perturbes
 h = waitbar(0,sprintf('%d-%d',depart,fin));
+
 for i=1:n
     waitbar(i/n,h)
     annee_cible = depart+i-1;
@@ -23,6 +24,7 @@ for i=1:n
     
     % Chargement des donnees perturbees
     meteo_perturbee = pretraitement_meteo_qtl(50, 's', annee_cible, 2014, 2, 0);
+    
     % Chargement des donnees reelles
     donnees_obs = load('/home/beaudin/matlab/Manic/meteo/meteo_Manic2.csv'); 
     ind = find(donnees_obs(:,1)==annee_cible);
@@ -34,7 +36,11 @@ for i=1:n
             utilisation_hsami(meteo_reelle,etat,eau_hydrogrammes,1,2);
     debit(:,i) = fct_debit_obs(annee_cible,2);
     etat_n(i,:)=etat;
-
+    
+    %figure, hold on
+    %h1=plot(meteo_perturbee(:,4),'-r','linewidth',2);
+    %h2=plot(meteo_reelle(:,4),'-b');
+    
 end
 
 close(h)
@@ -62,20 +68,22 @@ end
 if fig==1
     % courbes superposees
     color_b = colormap(cbrewer('seq','Blues',n)); close;
-    color_r = colormap(cbrewer('seq','Blues',n)); close;
+    color_r = colormap(cbrewer('seq','Reds',n)); close;
     figure, hold on, box on, grid on, xlim([1 366])
-    for i=1:n-1
-        plot(debits_horizontaux,'color',color_b(i,:),'linewidth',2)
-        plot(debits_verticaux,'color',color_r(i,:),'linewidth',1)
+    for i=1:10:n-1
+        plot(debits_horizontaux(:,i),'color',color_b(i,:),'linewidth',2)
+        plot(debits_verticaux(:,i),'color',color_r(i,:),'linewidth',2)
+        %plot(debits_horizontaux(:,i)+debits_verticaux(:,i),'color',color_r(i,:),'linewidth',2)
     end
     hold off
     
     % n annees
     figure, hold on, box on, grid on, xlim([1 length(vect_h)])
-    plot(debit_n,'b','linewidth',5)
+    plot(debit_n,'b','linewidth',2)
     plot(vect_h,'g')
-    plot(vect_v,'m')
-    plot(vect_h+vect_v,'r')
+    %plot(vect_v,'m')
+    %plot(vect_h+vect_v,'r')
+    
     hold off
     
     % etats
