@@ -1,7 +1,7 @@
 % % % Utilisation du modele hydrologique HSAMI
 
-function [debits_horizontaux_perturbes debits_verticaux_perturbes etat eau_hydrogrammes] = ...
-    utilisation_hsami(meteo,etat,eau_hydrogrammes,fenetre,manic)
+function [debits_horizontaux etat eau_hydrogrammes] = ...
+    utilisation_hsami(meteo,etat,eau_hydrogrammes,manic)
 
 
 %manic=2; etat_ini=zeros(1,10); eau_hydrogrammes_ini=zeros(10,2);
@@ -16,8 +16,8 @@ etp = -1; %S'IL EST NEGATIF, HSAMI L'EVALUE
 if manic==2, manic=5; elseif manic==5, manic=2; end
 superficie = num(24,manic);
 param = num(1:23,manic);
-apport_horizontal = nan(length(meteo),3);
-apport_vertical = nan(length(meteo),3);
+apport_horizontal = nan(length(meteo),1);
+apport_vertical = nan(length(meteo),1);
 app_h = nan(nb_pas,3);
 app_v = nan(nb_pas,3);
 
@@ -31,16 +31,12 @@ for jour=1:length(meteo)
         =hsami_meteo_apport(versionHSAMI,pas,nb_pas,param,meteo_j,etp,...
         etat,eau_hydrogrammes);
     
-    % Somme des apports et conversion de cm/pas_de_temps en m?/s
-    apport_horizontal(jour,:) = sum(app_h).*superficie.*nb_pas./8.64;
-    apport_vertical(jour,:) = sum(app_v).*superficie.*nb_pas./8.64;
+    % Somme des apports et conversion de cm/pas_de_temps en m^3/s
+    apport_horizontal(jour,1) = sum(app_h).*superficie.*nb_pas./8.64;
 end
 
 %on standardise les vecteurs a 366 jours
 if length(apport_horizontal)==365,
-    apport_horizontal=insertrow(apport_horizontal,apport_horizontal(365),365);
-    apport_vertical=insertrow(apport_vertical,apport_vertical(365),365);
+    apport_horizontal=insertrow(apport_horizontal,nan,365);
 end
-%on applique une moyenne mobile
-debits_horizontaux_perturbes = movingmean(sum(apport_horizontal,2),fenetre,[],1);
-debits_verticaux_perturbes = movingmean(sum(apport_vertical,2),fenetre,[],1);
+debits_horizontaux = apport_horizontal(:,1);

@@ -74,6 +74,8 @@ switch lower(freq)
             
             [out(oi,:), dsf(s,:), P] = rank_based_scaling(obs.data(oi), ref.data(ri), fut.data(fi), N, type, cap, annee_source, annee_cible);
         % avant, out=out.data(oi,:)
+        %obs=obs.data(oi); ref=ref.data(ri); fut=fut.data(fi);
+        
         end
         
         %out.dates = scale_dates(obs.dates, fut.dates(1,1) - ref.dates(1,1));   

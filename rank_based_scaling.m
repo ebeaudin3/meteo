@@ -73,13 +73,20 @@ switch lower(type)
         sf(sf<0) = 0.;
         sf(sf>cap) = cap;
         out = interp1(obsP, sf, obs, 'nearest', 'extrap') .*  obs;
-                    %colorb = colormap(cbrewer('seq','PuRd',2013-1950+1)); 
+                    %colorb = colormap(cbrewer('seq','PuRd',2013-1950+1)); close;
                     %figure, hold on
-                    %for annee_cible = 1950:2013; 
-                    %    sf = futP./refP; 
-                    %    sf_n(annee_cible-1949,:) = sf.^((annee_source-annee_cible)/80); 
+                    %sf = futP./refP; plot(sf,'k','linewidth',1)
+                    %for annee_cible = 1950:10:2013;
+                    %    sf_n(annee_cible-1949,:) = sf.^((annee_source-annee_cible)/80);
                     %    plot(sf_n(annee_cible-1949,:),'color',colorb(annee_cible-1949,:),'linewidth',2); 
                     %end
+                    %title('Variation du "scaling factor" (sf) selon l''annee cible par rapport a 2014. Saison = 3','fontsize',14);
+                    %xlabel('Quantiles')
+                    %ylabel('Sf')
+                    %legend('Sf original','1950','1960','1970','1980','1990','2000','2010');
+                    %set(gca,'fontsize',14)
+                    %savefile = 'sf_s3.png';
+                    %print(gcf, '-dpng','-r400', savefile) 
 
     case 'additive'
         sf = futP - refP;

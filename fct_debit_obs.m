@@ -2,7 +2,7 @@
 function deb = fct_debit_obs(annee, manic)
 
 %manic = 2;
-mois = 10;
+mois = 1;
 %fenetre = 15;
 
 if manic==2; app_Manic = load('app_Manic2.csv'); end
