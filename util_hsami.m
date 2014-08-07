@@ -63,12 +63,10 @@ debit_n = nan(366*(size(debits_horizontaux,2)),1);
 for i=1:(size(debits_horizontaux,2))
     vect_h(366*(i-1)+1:366*i,1)=debits_horizontaux(:,i);
     debit_n(366*(i-1)+1:366*i,1)=debit(:,i);
-end
-for i=1:length(vect_h)
-    if isnan(vect_h(i))
-        vect_h(i)=[];
-    end
-end
+end  
+vect_h(isnan(vect_h(:,1)),:)=[];
+
+
                     % % % section graphique % % %
          
 if fig==1

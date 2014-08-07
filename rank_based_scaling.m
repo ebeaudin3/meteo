@@ -69,21 +69,22 @@ switch lower(type)
     case 'multiplicative'
         % Clip to 0 if negative.
         sf = futP./refP;
-        sf = sf.^((annee_source-annee_cible)/80);
+        sf = 1 + (sf-1)./(annee_source-annee_cible);%sf.^((annee_source-annee_cible)/80);
         sf(sf<0) = 0.;
         sf(sf>cap) = cap;
         out = interp1(obsP, sf, obs, 'nearest', 'extrap') .*  obs;
                     %colorb = colormap(cbrewer('seq','PuRd',2013-1950+1)); close;
                     %figure, hold on
                     %sf = futP./refP; plot(sf,'k','linewidth',1)
-                    %for annee_cible = 1950:10:2013;
-                    %    sf_n(annee_cible-1949,:) = sf.^((annee_source-annee_cible)/80);
+                    %for annee_cible = 1950:1:2013;
+                    %    sf_n(annee_cible-1949,:) = 1 + (sf-1)./(annee_source-annee_cible);
+                    %    %sf_n(annee_cible-1949,:) = sf.^((annee_source-annee_cible)/80);
                     %    plot(sf_n(annee_cible-1949,:),'color',colorb(annee_cible-1949,:),'linewidth',2); 
                     %end
-                    %title('Variation du "scaling factor" (sf) selon l''annee cible par rapport a 2014. Saison = 3','fontsize',14);
+                    %title('Variation du "scaling factor" (sf) selon l''annee cible par rapport a 2014. Saison = ete','fontsize',14);
                     %xlabel('Quantiles')
                     %ylabel('Sf')
-                    %legend('Sf original','1950','1960','1970','1980','1990','2000','2010');
+                    %legend('80 ans','65 ans','55 ans','45 ans','35 ans','25 ans','15 ans','5 ans');
                     %set(gca,'fontsize',14)
                     %savefile = 'sf_s3.png';
                     %print(gcf, '-dpng','-r400', savefile) 
