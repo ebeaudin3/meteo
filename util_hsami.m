@@ -108,16 +108,18 @@ if fig==1
     for i=1:size(donnees,2)
         hold on
         
-        subaxis(8,8,pos(i,2),pos(i,1),'SpacingHoriz',0,'SpacingVert',0.04), hold on
+        subaxis(8,8,pos(i,2),pos(i,1),'SpacingHoriz',0,'SpacingVert',0.04), hold on, grid on
         plot(debit_catherine(:,i),'k','linewidth',1.5), hold off
-        subaxis(8,8,pos(i,2),pos(i,1),'SpacingHoriz',0,'SpacingVert',0.04), hold on
+        subaxis(8,8,pos(i,2),pos(i,1),'SpacingHoriz',0,'SpacingVert',0.04), hold on, grid on
         plot(donnees(:,i),'color',color_b(45,:),'linewidth',1.5) 
         
         xlim([0 length(donnees(:,i))])
         ylim([0 1.1*max(max(donnees))])
-        if pos(i,2)~=1, set(gca,'Ytick',[]), else set(gca,'fontsize',8), ylabel('m^3/s'); end
-        if pos(i,1)~=8, set(gca,'Xtick',[]), else set(gca,'fontsize',8); end
-        title(1949+i,'fontsize',6)
+        if pos(i,2)~=1, set(gca,'Ytick',[]), else set(gca,'fontsize',5), ylabel('debit [m^3/s]'); end
+        if pos(i,1)~=8, set(gca,'Xtick',[]), else set(gca, 'fontsize', 6, 'XTick', [1 91 181 271 366], 'XTickLabel',{'Jan' 'Avr' 'Juil' 'Oct'}); end
+        titre = 1949+i;
+        if titre==1950, titre = sprintf('1950 - annee de rodage'); end
+        title(titre,'fontsize',6)
     end
     
     savefile='debit_perturbe.png';

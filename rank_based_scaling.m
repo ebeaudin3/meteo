@@ -69,25 +69,30 @@ switch lower(type)
     case 'multiplicative'
         % Clip to 0 if negative.
         sf = futP./refP;
-        sf = 1 + (sf-1)./(annee_source-annee_cible);%sf.^((annee_source-annee_cible)/80);
+        sf =  1 + (sf-1).*((annee_source-annee_cible)/(2055-1975));%sf.^((annee_source-annee_cible)/80);
         sf(sf<0) = 0.;
         sf(sf>cap) = cap;
         out = interp1(obsP, sf, obs, 'nearest', 'extrap') .*  obs;
-                    %colorb = colormap(cbrewer('seq','PuRd',2013-1950+1)); close;
+                    %%% GRAPHIQUE %%%
+                    %colorb = colormap(cbrewer('div','RdYlBu',65)); close;
                     %figure, hold on
                     %sf = futP./refP; plot(sf,'k','linewidth',1)
+                    %i=1;
                     %for annee_cible = 1950:1:2013;
-                    %    sf_n(annee_cible-1949,:) = 1 + (sf-1)./(annee_source-annee_cible);
-                    %    %sf_n(annee_cible-1949,:) = sf.^((annee_source-annee_cible)/80);
-                    %    plot(sf_n(annee_cible-1949,:),'color',colorb(annee_cible-1949,:),'linewidth',2); 
+                    %    sf_n(annee_cible-1949,:) =  1 + (sf-1).*((annee_source-annee_cible)/(2055-1975));%1 + (sf-1)./(annee_source-annee_cible);
+                    %    plot(sf_n(annee_cible-1949,:),'color',colorb(i,:),'linewidth',2); 
+                    %    i=i+1;
                     %end
-                    %title('Variation du "scaling factor" (sf) selon l''annee cible par rapport a 2014. Saison = ete','fontsize',14);
                     %xlabel('Quantiles')
-                    %ylabel('Sf')
-                    %legend('80 ans','65 ans','55 ans','45 ans','35 ans','25 ans','15 ans','5 ans');
-                    %set(gca,'fontsize',14)
+                    %xlim([1 50])
+                    %label('Scaling factor')
+                    %colormap(cbrewer('div','RdYlBu',2013-1950+1));
+                    %colorbar('YTickLabel', {'2000','1990','1980','1970','1960','1950'})
+                    %set(gca,'fontsize',12)
+                    %matlab2tikz('sf_ete.tikz', 'height', '\figureheight', 'width', '\figurewidth');
                     %savefile = 'sf_s3.png';
                     %print(gcf, '-dpng','-r400', savefile) 
+                       
 
     case 'additive'
         sf = futP - refP;
