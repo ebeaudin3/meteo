@@ -2,8 +2,8 @@ function meteo_perturbee = pretraitement_meteo_qtl(N, freq, annee_cible, annee_s
 
 % % % PERTURBATION DES DONNEES METEO PAR QUANTILE % % %
 
-%pour utilisation sans fonction :
-%manic=2; N=50; freq='s'; annee_cible = 2010; annee_source=2014; fig=1;
+%pour utilisation sans fonction, commenter 'function' et decommenter la ligne suivante :
+%manic=2; N=50; freq='s'; annee_cible = 1980; annee_source=2014; fig=1;
 
 %% INITIALISATION DES VARIABLES
 profile on
@@ -61,13 +61,13 @@ for i_meteo=1:4
     end
     
     %% SECTION GRAPHIQUE
-    if fig==1 && i_meteo==1
+    if fig==1% && i_meteo==1
         colorb = colormap(cbrewer('qual','Set2',8)); if annee_cible==1950, close; end
         figure
         hold on, grid on, box on
         xlim([0 366])
         %datetick('x','mmm')
-        %ylabel(y)
+        ylabel(sprintf('%s',cell2mat(type_meteo{i_meteo}(4))))
         set(gca,'fontsize',14)
         plot(obs.data,'linewidth',0.5,'color',[0.4020 0.4020 0.4020]);
         minout = min(out,[],2);

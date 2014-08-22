@@ -76,20 +76,19 @@ switch lower(type)
                     %%% GRAPHIQUE %%%
                     %colorb = colormap(cbrewer('div','RdYlBu',65)); close;
                     %figure, hold on
-                    %sf = futP./refP; plot(sf,'k','linewidth',1)
-                    %i=1;
+                    %sf = futP./refP; sf(sf<0) = 0.; plot(sf,'k','linewidth',1)
                     %for annee_cible = 1950:1:2013;
                     %    sf_n(annee_cible-1949,:) =  1 + (sf-1).*((annee_source-annee_cible)/(2055-1975));%1 + (sf-1)./(annee_source-annee_cible);
-                    %    plot(sf_n(annee_cible-1949,:),'color',colorb(i,:),'linewidth',2); 
-                    %    i=i+1;
+                    %    plot(sf_n(annee_cible-1949,:),'color',colorb(annee_cible-1949,:),'linewidth',2); 
                     %end
                     %xlabel('Quantiles')
-                    %xlim([1 50])
-                    %label('Scaling factor')
+                    %xlim([25 50])
+                    %ylabel('Scaling factor')
                     %colormap(cbrewer('div','RdYlBu',2013-1950+1));
-                    %colorbar('YTickLabel', {'2000','1990','1980','1970','1960','1950'})
+                    %colorbar('YTickLabel', {'1950','1960','1970','1980','1990','2000','2010'})
                     %set(gca,'fontsize',12)
-                    %matlab2tikz('sf_ete.tikz', 'height', '\figureheight', 'width', '\figurewidth');
+                    %box on
+                    %matlab2tikz('sf_hiver.tikz', 'height', '\figureheight', 'width', '\figurewidth');
                     %savefile = 'sf_s3.png';
                     %print(gcf, '-dpng','-r400', savefile) 
                        
